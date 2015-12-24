@@ -1,11 +1,15 @@
 import cv2
 from numpy import *
 from pylab import *
-
+import math
 
 path = 'images/pca.jpg'
+#path = 'images/ellipse.png'
+
 img = cv2.imread(path)
 imgray = cv2.imread(path,0)
+
+test = img.copy()
 
 # Contour detection
 #ret,thresh = cv2.threshold(imgray,127,255,0)
@@ -19,10 +23,28 @@ thresh = cv2.Canny(imgray,75,200)
 
 __ , contours, hierarchy = cv2.findContours(thresh.copy(),cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 
-#cnts = sorted(contours, key = cv2.contourArea, reverse = True)[:10]
+
 cnts = sorted(contours, key = cv2.contourArea, reverse = True)
 
-test = img.copy()
+
+# Iterate through all contours
+for i in range(0,len(cnts)-1):
+    sel_cnts = sorted(contours, key = cv2.contourArea, reverse = True)[i]
+
+    # get orientation angle and center coord
+    center, axis,angle = cv2.fitEllipse(sel_cnts)
+
+    hyp = 100  # length of the orientation line
+
+    # Find out coordinates of 2nd point if given length of line and center coord 
+    linex = int(center[0]) + int(math.sin(math.radians(angle))*hyp)
+    liney = int(center[1]) - int(math.cos(math.radians(angle))*hyp)
+
+    # Draw orienation
+    cv2.line(test, (int(center[0]),int(center[1])), (linex, liney), (0,0,255),5)             
+    cv2.circle(test, (int(center[0]), int(center[1])), 10, (255,0,0), -1)
+
+
 cv2.drawContours(test, cnts, -1,(0,255,0),2)
 cv2.imshow('contours', test)
 cv2.waitKey(0)
