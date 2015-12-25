@@ -25,9 +25,14 @@ def histogram_backprojection(img):
     img_width = img.shape[1]
 
     img_demi = img[0:3*(img_height/5) , 0:(img_width)]
+    #img_demi = img[0:img_height , 0:(img_width)]     # Histogram of entire image
     #img_demi = img[0:img_height , 0:5*(img_width/7)]
 
     hsv = cv2.cvtColor(img_demi,cv2.COLOR_BGR2HSV)
+
+
+    print hsv.shape
+    
     hsvt = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
     
     # calculating object histogram
@@ -114,7 +119,7 @@ z = 'am'
 #path = 'images/ellipse.png'
 #path = 'images/obj_1.jpg'
 path = 'images/pic in bins/23.jpg'
-#path = 'images/pic in bins/16.jpg'
+#path = 'images/pic in bins/1.jpg'
 
 
 img = cv2.imread(path)
@@ -133,6 +138,7 @@ __ , contours, hierarchy = cv2.findContours(thresh.copy(),cv2.RETR_TREE,cv2.CHAI
 # Iterate through all contours
 test = cnt_gui(final, contours)
 
+cv2.imwrite('1.jpg', final)
 
 cv2.imshow('thresh', thresh)
 cv2.imshow('contours', final)
