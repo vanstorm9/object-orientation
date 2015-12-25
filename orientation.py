@@ -30,7 +30,7 @@ __ , contours, hierarchy = cv2.findContours(thresh.copy(),cv2.RETR_TREE,cv2.CHAI
 # Iterate through all contours
 test = CVAlgo.cnt_gui(final, contours)
 
-cv2.imwrite('1.jpg', final)
+#cv2.imwrite('1.jpg', final)
 
 cv2.imshow('thresh', thresh)
 cv2.imshow('contours', final)
