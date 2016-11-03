@@ -59,6 +59,15 @@ def morph_trans(img):
 
     return img
 
+
+def morph_trans_shelf(img):
+    # Implementing morphological erosion & dilation
+    kernel = np.ones((3,3),np.uint8)  # (6,6) to get more contours (9,9) to reduce noise
+    img = cv2.erode(img, kernel, iterations = 4) # Shrink to remove noise
+    img = cv2.dilate(img, kernel, iterations=6)  # Grow to combine stray blobs
+
+    return img
+
 def canny(imgray):
     imgray = cv2.GaussianBlur(imgray, (11,11), 200)
     canny_low = 0
@@ -97,6 +106,24 @@ def filtering(img, imgray, mode):
     if mode == 'am':
         thresh= invert_img(histogram_backprojection(img))
         thresh = morph_trans(thresh)
+
+    elif mode == 'pr':
+        
+        
+        imgray = cv2.medianBlur(imgray, 11)
+        thresh = cv2.Canny(imgray,75,200)
+    else:
+        print 'error in filtering function'
+        quit()
+
+    return thresh, imgray
+
+
+
+def shelfFiltering(img, imgray, mode):
+    if mode == 'am':
+        thresh= invert_img(histogram_backprojection(img))
+        thresh = morph_trans_shelf(thresh)
 
     elif mode == 'pr':
         
