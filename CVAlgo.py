@@ -51,6 +51,8 @@ def histogram_backprojection(img):
 
     return thresh
 
+
+
 def morph_trans(img):
     # Implementing morphological erosion & dilation
     kernel = np.ones((9,9),np.uint8)  # (6,6) to get more contours (9,9) to reduce noise
@@ -63,8 +65,8 @@ def morph_trans(img):
 def morph_trans_shelf(img):
     # Implementing morphological erosion & dilation
     kernel = np.ones((3,3),np.uint8)  # (6,6) to get more contours (9,9) to reduce noise
-    img = cv2.erode(img, kernel, iterations = 4) # Shrink to remove noise
-    img = cv2.dilate(img, kernel, iterations=6)  # Grow to combine stray blobs
+    img = cv2.erode(img, kernel, iterations = 3) # Shrink to remove noise
+    img = cv2.dilate(img, kernel, iterations=10)  # Grow to combine stray blobs
 
     return img
 
