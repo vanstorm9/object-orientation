@@ -8,7 +8,7 @@ def invert_img(img):
     img = (255-img)
     return img
 
-def histogram_equalization(img):
+def histogram_equalization(img, reference_img):
     hist,bins = np.histogram(img.flatten(),256,[0,256])
  
     cdf = hist.cumsum()     
@@ -19,16 +19,25 @@ def histogram_equalization(img):
 
     return img2
 
-def histogram_backprojection(img):
-
+def histogram_backprojection(img, ref_img):
+    '''
     img_height = img.shape[0]
     img_width = img.shape[1]
+    #img_demi = img[0:3*(img_height/5) , 0:(img_width)]
+    img_demi = img[0:img_height , 0:2*(img_width/3)]
+    '''
+    
+    img_height = ref_img.shape[0]
+    img_width = ref_img.shape[1]
+    img_demi = ref_img[0:img_height , 0:(img_width)]     # Histogram of entire image
+    
+    
 
-    img_demi = img[0:3*(img_height/5) , 0:(img_width)]
-    #img_demi = img[0:img_height , 0:(img_width)]     # Histogram of entire image
-    #img_demi = img[0:img_height , 0:2*(img_width/3)]
+    
+
 
     hsv = cv2.cvtColor(img_demi,cv2.COLOR_BGR2HSV)
+    #hsv = cv2.cvtColor(ref_img,cv2.COLOR_BGR2HSV)
 
 
     print hsv.shape
@@ -104,9 +113,9 @@ def cnt_gui(img, contours):
 
     return img
 
-def filtering(img, imgray, mode):
+def filtering(img, imgray, ref_img,mode):
     if mode == 'am':
-        thresh= invert_img(histogram_backprojection(img))
+        thresh= invert_img(histogram_backprojection(img, ref_img))
         thresh = morph_trans(thresh)
 
     elif mode == 'pr':
@@ -122,9 +131,9 @@ def filtering(img, imgray, mode):
 
 
 
-def shelfFiltering(img, imgray, mode):
+def shelfFiltering(img, imgray, ref_img, mode):
     if mode == 'am':
-        thresh= invert_img(histogram_backprojection(img))
+        thresh= invert_img(histogram_backprojection(img, ref_img))
         thresh = morph_trans_shelf(thresh)
 
     elif mode == 'pr':
